@@ -1,0 +1,17 @@
+# Ignorar archivos de entorno
+.env
+
+# Ignorar node_modules
+node_modules/
+
+# Ignorar archivos de log
+*.log
+
+# Ignorar la carpeta de build (si existe)
+build/
+
+# Ignorar configuraciones de IDEs (como VS Code)
+.vscode/
+
+# Ignorar archivos de sistema de macOS
+.DS_Store
