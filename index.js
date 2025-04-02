@@ -9,6 +9,7 @@ const resistancescategoriesRoutes = require("./routes/resistancecategories");
 // Importar rutas desde la carpeta routes
 const epeRoutes = require("./routes/epe");
 const foamRoutes = require("./routes/foam");
+const preciosfoamRoutes = require("./routes/preciosfoam");
 const coloresFoamRoutes = require("./routes/coloresfoam");
 const coloresPrecioRoutes = require("./routes/coloresprecio");
 const poliburbujaRoutes = require("./routes/poliburbuja");
@@ -27,6 +28,7 @@ app.use("/api/resistancescategories", resistancescategoriesRoutes);
 
 app.use("/api/epe", epeRoutes);
 app.use("/api/foam", foamRoutes);
+app.use("/api/preciosfoam", preciosfoamRoutes);
 app.use("/api/coloresfoam", coloresFoamRoutes);
 app.use("/api/coloresprecio", coloresPrecioRoutes);
 app.use("/api/poliburbuja", poliburbujaRoutes);
