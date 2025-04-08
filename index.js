@@ -15,6 +15,9 @@ const coloresPrecioRoutes = require("./routes/coloresprecio");
 const poliburbujaRoutes = require("./routes/poliburbuja");
 const poliburbujapreciosRoutes = require("./routes/poliburbujaprecios");
 
+const authRoutes = require("./routes/authRoutes");
+const privateRoutes = require("./routes/privateRoutes");
+
 
 const app = express();
 app.use(cors());
@@ -27,12 +30,20 @@ app.use("/api/resistancescategories", resistancescategoriesRoutes);
 
 
 app.use("/api/epe", epeRoutes);
+
 app.use("/api/foam", foamRoutes);
 app.use("/api/preciosfoam", preciosfoamRoutes);
 app.use("/api/coloresfoam", coloresFoamRoutes);
 app.use("/api/coloresprecio", coloresPrecioRoutes);
+
 app.use("/api/poliburbuja", poliburbujaRoutes);
 app.use("/api/poliburbujaprecios", poliburbujapreciosRoutes);
+
+
+app.use("/auth", authRoutes); // Rutas de autenticación
+app.use("/api", privateRoutes); // Rutas protegidas
+
+
 
 
 const PORT = process.env.PORT || 5000;
