@@ -14,6 +14,7 @@ const coloresFoamRoutes = require("./routes/coloresfoam");
 const coloresPrecioRoutes = require("./routes/coloresprecio");
 const poliburbujaRoutes = require("./routes/poliburbuja");
 const poliburbujapreciosRoutes = require("./routes/poliburbujaprecios");
+const evaRoutes = require("./routes/Eva");
 
 const authRoutes = require("./routes/authRoutes");
 const privateRoutes = require("./routes/privateRoutes");
@@ -38,6 +39,8 @@ app.use("/api/coloresprecio", coloresPrecioRoutes);
 
 app.use("/api/poliburbuja", poliburbujaRoutes);
 app.use("/api/poliburbujaprecios", poliburbujapreciosRoutes);
+
+app.use("/api/eva", evaRoutes);
 
 
 app.use("/auth", authRoutes); // Rutas de autenticación
