@@ -30,8 +30,7 @@ const app = express();
 
 app.use(cors());
 
-// Middleware para autenticación
-app.use(authenticateToken);
+
 // Middleware para registrar acciones
 app.use(historicalActionsMiddleware);
 app.use(express.json());
