@@ -3,7 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
-const { authenticateToken } = require('./middleware/authMiddleware');
+
 const historicalActionsMiddleware = require('./middleware/historicalActionsMiddleware');
 
 
@@ -34,8 +34,7 @@ app.use(cors());
 
 
 app.use(express.json());
-//
-app.use(authenticateToken); 
+
 // Middleware para registrar acciones
 app.use(historicalActionsMiddleware);
 
