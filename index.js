@@ -2,6 +2,12 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+
+const { authenticateToken } = require('./middleware/authMiddleware');
+const historicalActionsMiddleware = require('./middleware/historicalActionsMiddleware');
+
+
+
 const materialsRoutes = require("./routes/materials");
 const derivativesRoutes = require("./routes/derivatives");
 const resistancesRoutes = require("./routes/resistances");
@@ -21,6 +27,11 @@ const privateRoutes = require("./routes/privateRoutes");
 
 
 const app = express();
+// Middleware para autenticación
+app.use(authenticateToken);
+
+// Middleware para registrar acciones
+app.use(historicalActionsMiddleware);
 app.use(cors());
 app.use(express.json());
 
