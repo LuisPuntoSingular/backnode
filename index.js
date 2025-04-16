@@ -27,12 +27,13 @@ const privateRoutes = require("./routes/privateRoutes");
 
 
 const app = express();
+
+app.use(cors());
+
 // Middleware para autenticación
 app.use(authenticateToken);
-
 // Middleware para registrar acciones
 app.use(historicalActionsMiddleware);
-app.use(cors());
 app.use(express.json());
 
 app.use("/api/materials", materialsRoutes);
