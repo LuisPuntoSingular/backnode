@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 
 const historicalActionsMiddleware = require('./middleware/historicalActionsMiddleware');
-const { authenticateToken } = require("./middleware/authMiddleware"); // Importar authenticateToken
+
 
 const materialsRoutes = require("./routes/materials");
 const derivativesRoutes = require("./routes/derivatives");
@@ -28,8 +28,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/auth", authRoutes); // Rutas de autenticación
-app.use(authenticateToken); // Middleware de autenticación
-// Middleware para registrar acciones
+
 app.use(historicalActionsMiddleware);
 
 
