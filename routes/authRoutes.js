@@ -1,5 +1,6 @@
 const express = require("express");
 const { registerUser, authenticateUser } = require("../services/authService");
+const { authenticateToken } = require("../middlewares/authenticateToken");
 
 const router = express.Router();
 
@@ -23,6 +24,11 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     res.status(401).json({ message: err.message });
   }
+});
+
+// Ruta para validar el token
+router.get("/auth/validate-token", authenticateToken, (req, res) => {
+  res.status(200).json({ message: "Token válido", user: req.user });
 });
 
 module.exports = router;
