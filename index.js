@@ -1,10 +1,9 @@
-// index.js
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
 const historicalActionsMiddleware = require('./middleware/historicalActionsMiddleware');
-const { authenticateToken } = require("./middleware/authMiddleware"); // Importar authenticateToken
+const { authenticateToken } = require("./middleware/authMiddleware");
 
 const materialsRoutes = require("./routes/materials");
 const derivativesRoutes = require("./routes/derivatives");
@@ -27,32 +26,28 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/auth", authRoutes); // Rutas de autenticación
+// Rutas públicas
+app.use("/auth", authRoutes); // Rutas de autenticación (públicas)
 
-app.use(historicalActionsMiddleware);
+// Rutas protegidas
+app.use("/api", authenticateToken, historicalActionsMiddleware); // Proteger todas las rutas bajo /api
 
-
+// Rutas de la API
 app.use("/api/materials", materialsRoutes);
 app.use("/api/derivatives", derivativesRoutes);
 app.use("/api/resistances", resistancesRoutes);
 app.use("/api/resistancescategories", resistancescategoriesRoutes);
-
 app.use("/api/epe", epeRoutes);
 app.use("/api/foam", foamRoutes);
 app.use("/api/preciosfoam", preciosfoamRoutes);
 app.use("/api/coloresfoam", coloresFoamRoutes);
 app.use("/api/coloresprecio", coloresPrecioRoutes);
-
 app.use("/api/poliburbuja", poliburbujaRoutes);
 app.use("/api/poliburbujaprecios", poliburbujapreciosRoutes);
 app.use("/api/eva", evaRoutes);
 
-app.use(authenticateToken); // Middleware de autenticación
-// Middleware para registrar acciones
+// Rutas privadas
 app.use("/api", privateRoutes); // Rutas protegidas
-
-
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Servidor en el puerto ${PORT}`));
