@@ -2,8 +2,8 @@ const client = require('../db');
 
 const historicalActionsMiddleware = async (req, res, next) => {
   try {
-    // Extraer información del usuario (asumiendo que tienes autenticación implementada)
-    const user = req.user ? req.user.username : 'Unknown User'; // Cambia según tu implementación de autenticación
+    // Usar el email como identificador del usuario
+    const user = req.user ? req.user.email : 'Unknown User';
     const action = `${req.method} ${req.originalUrl}`;
     const timestamp = new Date();
 
@@ -19,6 +19,5 @@ const historicalActionsMiddleware = async (req, res, next) => {
     next(); // Continuar incluso si ocurre un error al registrar
   }
 };
-
 
 module.exports = historicalActionsMiddleware;

@@ -27,8 +27,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Middleware para registrar acciones
-app.use(historicalActionsMiddleware);
+
 
 app.use("/api/materials", materialsRoutes);
 app.use("/api/derivatives", derivativesRoutes);
@@ -49,6 +48,8 @@ app.use("/auth", authRoutes); // Rutas de autenticación
 
 app.use(authenticateToken); // Middleware de autenticación
 app.use("/api", privateRoutes); // Rutas protegidas
+// Middleware para registrar acciones
+app.use(historicalActionsMiddleware);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Servidor en el puerto ${PORT}`));
