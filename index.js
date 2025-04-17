@@ -18,6 +18,7 @@ const coloresPrecioRoutes = require("./routes/coloresprecio");
 const poliburbujaRoutes = require("./routes/poliburbuja");
 const poliburbujapreciosRoutes = require("./routes/poliburbujaprecios");
 const evaRoutes = require("./routes/Eva");
+const authenticateToken = require("./middleware/authMiddleware"); // Middleware para autenticar el token JWT
 
 const authRoutes = require("./routes/authRoutes");
 const privateRoutes = require("./routes/privateRoutes");
@@ -29,7 +30,8 @@ app.use(express.json());
 
 app.use("/auth", authRoutes); // Rutas de autenticación
 
-app.use(historicalActionsMiddleware);
+// Proteger rutas de la API y registrar acciones
+app.use("/api", authenticateToken, historicalActionsMiddleware);
 
 
 app.use("/api/materials", materialsRoutes);
