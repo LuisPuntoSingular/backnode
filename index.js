@@ -58,6 +58,8 @@ app.use("/api/eva", evaRoutes);
 
 
 app.use("/auth", authRoutes); // Rutas de autenticación
+
+app.use(authenticateToken);
 app.use("/api", privateRoutes); // Rutas protegidas
 
 
