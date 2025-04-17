@@ -28,10 +28,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/auth", authRoutes); // Rutas de autenticación
-app.use(authenticateToken); // Middleware de autenticación
-app.use("/api", privateRoutes); // Rutas protegidas
-// Middleware para registrar acciones
-app.use(historicalActionsMiddleware);
+
 
 
 
@@ -50,7 +47,10 @@ app.use("/api/poliburbuja", poliburbujaRoutes);
 app.use("/api/poliburbujaprecios", poliburbujapreciosRoutes);
 app.use("/api/eva", evaRoutes);
 
-
+app.use(authenticateToken); // Middleware de autenticación
+app.use("/api", privateRoutes); // Rutas protegidas
+// Middleware para registrar acciones
+app.use(historicalActionsMiddleware);
 
 
 
