@@ -27,9 +27,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/auth", authRoutes); // Rutas de autenticación
+app.use("/auth", authRoutes,historicalActionsMiddleware); // Rutas de autenticación
 
-app.use(historicalActionsMiddleware);
+
 
 
 app.use("/api/materials", materialsRoutes);
