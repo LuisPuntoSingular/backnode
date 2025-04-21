@@ -40,6 +40,7 @@ router.put("/:id", async (req, res) => {
     }
     res.json(result.rows[0]);
   } catch (error) {
+    console.error("Error en el backend:", error); // Captura el error exacto
     res.status(500).json({ error: error.message });
   }
 });
