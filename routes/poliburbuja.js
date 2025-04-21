@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const client = require('../db');
 
-// Obtener todas las entradas de Poliburbuja
+// Obtener todos los derivados de Poliburbuja
 router.get("/", async (req, res) => {
   try {
     const result = await client.query("SELECT * FROM Poliburbuja");
@@ -12,13 +12,13 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Crear una nueva entrada de Poliburbuja
+// Crear un nuevo derivado de Poliburbuja
 router.post("/", async (req, res) => {
-  const { medidas, precio, idpoliburbuja, ancho_rollo, largo_rollo } = req.body;
+  const { derivados } = req.body;
   try {
     const result = await client.query(
-      "INSERT INTO Poliburbuja (medidas, precio, idpoliburbuja, ancho_rollo, largo_rollo) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [medidas, precio, idpoliburbuja, ancho_rollo, largo_rollo]
+      "INSERT INTO Poliburbuja (derivados) VALUES ($1) RETURNING *",
+      [derivados]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -26,14 +26,14 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Actualizar una entrada de Poliburbuja existente
+// Actualizar un derivado de Poliburbuja existente
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { medidas, precio, idpoliburbuja, ancho_rollo, largo_rollo } = req.body;
+  const { derivados } = req.body;
   try {
     const result = await client.query(
-      "UPDATE Poliburbuja SET medidas = $1, precio = $2, idpoliburbuja = $3, ancho_rollo = $4, largo_rollo = $5 WHERE id = $6 RETURNING *",
-      [medidas, precio, idpoliburbuja, ancho_rollo, largo_rollo, id]
+      "UPDATE Poliburbuja SET derivados = $1 WHERE id = $2 RETURNING *",
+      [derivados, id]
     );
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Poliburbuja entry not found" });
@@ -44,7 +44,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Eliminar una entrada de Poliburbuja
+// Eliminar un derivado de Poliburbuja
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
