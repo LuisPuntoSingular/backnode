@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
   const { medidas, precio, idfoam, ancho_rollo, largo_rollo } = req.body;
   try {
     const result = await client.query(
-      "INSERT INTO preciosfoam (medidas, precio, idfoam, ancho_rollo, largo_rollo) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      "INSERT INTO preciosfoam (medidas, precio, idfoam, ancho rollo, largo rollo) VALUES ($1, $2, $3, $4, $5) RETURNING *",
       [medidas, precio, idfoam, ancho_rollo, largo_rollo]
     );
     res.status(201).json(result.rows[0]);
