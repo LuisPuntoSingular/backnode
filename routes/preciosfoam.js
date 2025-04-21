@@ -32,7 +32,7 @@ router.put("/:id", async (req, res) => {
   const { medidas, precio, idfoam, ancho_rollo, largo_rollo } = req.body;
   try {
     const result = await client.query(
-      "UPDATE preciosfoam SET medidas = $1, precio = $2, idfoam = $3, ancho_rollo = $4, largo_rollo = $5 WHERE id = $6 RETURNING *",
+      "UPDATE preciosfoam SET medidas = $1, precio = $2, idfoam = $3, ancho rollo = $4, largo rollo = $5 WHERE id = $6 RETURNING *",
       [medidas, precio, idfoam, ancho_rollo, largo_rollo, id]
     );
     if (result.rows.length === 0) {
