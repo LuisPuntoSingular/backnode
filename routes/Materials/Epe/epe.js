@@ -1,24 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const client = require('../db');
+const client = require('../../../db');
 
-// Obtener todas las entradas de EVA
+// Obtener todas las entradas de EPE
 router.get("/", async (req, res) => {
   try {
-    const result = await client.query("SELECT * FROM Eva");
+    const result = await client.query("SELECT * FROM Epe");
     res.json(result.rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Crear una nueva entrada de EVA
+// Crear una nueva entrada de EPE
 router.post("/", async (req, res) => {
-  const { medida, precio } = req.body;
+  const { medidas, precio } = req.body;
   try {
     const result = await client.query(
-      "INSERT INTO Eva (medida, precio) VALUES ($1, $2) RETURNING *",
-      [medida, precio]
+      "INSERT INTO Epe (medidas, precio) VALUES ($1, $2) RETURNING *",
+      [medidas, precio]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -26,17 +26,17 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Actualizar una entrada de EVA existente
+// Actualizar una entrada de EPE existente
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { medida, precio } = req.body;
+  const { medidas, precio } = req.body;
   try {
     const result = await client.query(
-      "UPDATE Eva SET medida = $1, precio = $2 WHERE id = $3 RETURNING *",
-      [medida, precio, id]
+      "UPDATE Epe SET medidas = $1, precio = $2 WHERE id = $3 RETURNING *",
+      [medidas, precio, id]
     );
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: "EVA entry not found" });
+      return res.status(404).json({ error: "EPE entry not found" });
     }
     res.json(result.rows[0]);
   } catch (error) {
@@ -44,18 +44,18 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Eliminar una entrada de EVA
+// Eliminar una entrada de EPE
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const result = await client.query(
-      "DELETE FROM Eva WHERE id = $1 RETURNING *",
+      "DELETE FROM Epe WHERE id = $1 RETURNING *",
       [id]
     );
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: "EVA entry not found" });
+      return res.status(404).json({ error: "EPE entry not found" });
     }
-    res.json({ message: "EVA entry deleted successfully" });
+    res.json({ message: "EPE entry deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

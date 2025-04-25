@@ -6,22 +6,23 @@ const cors = require("cors");
 const historicalActionsMiddleware = require('./middleware/historicalActionsMiddleware');
 
 
-const materialsRoutes = require("./routes/materials");
-const derivativesRoutes = require("./routes/derivatives");
-const resistancesRoutes = require("./routes/resistances");
-const resistancescategoriesRoutes = require("./routes/resistancecategories");
-const epeRoutes = require("./routes/epe");
-const foamRoutes = require("./routes/foam");
-const preciosfoamRoutes = require("./routes/preciosfoam");
-const coloresFoamRoutes = require("./routes/coloresfoam");
-const coloresPrecioRoutes = require("./routes/coloresprecio");
-const poliburbujaRoutes = require("./routes/poliburbuja");
-const poliburbujapreciosRoutes = require("./routes/poliburbujaprecios");
-const evaRoutes = require("./routes/Eva");
+const materialsRoutes = require("./routes/Materials/materials");
+const derivativesRoutes = require("./routes/Materials/Cardboard/derivatives");
+const resistancesRoutes = require("./routes/Materials/Cardboard/resistances");
+const resistancescategoriesRoutes = require("./routes/Materials/Cardboard/resistancecategories");
+const epeRoutes = require("./routes/Materials/Epe/epe");
+const foamRoutes = require("./routes/Materials/Foam/foam");
+const preciosfoamRoutes = require("./routes/Materials/Foam/preciosfoam");
+const coloresFoamRoutes = require("./routes/Materials/Foam/coloresfoam");
+const coloresPrecioRoutes = require("./routes/Materials/Foam/coloresprecio");
+const poliburbujaRoutes = require("./routes/Materials/Polybbuble/poliburbuja");
+const poliburbujapreciosRoutes = require("./routes/Materials/Polybbuble/poliburbujaprecios");
+const evaRoutes = require("./routes/Materials/Eva/Eva");
 const { authenticateToken } = require("./middleware/authMiddleware");
-const authRoutes = require("./routes/authRoutes");
-const privateRoutes = require("./routes/privateRoutes");
-const employeeRoutes = require("./routes/employes");
+const authRoutes = require("./routes/Auth/authRoutes");
+const privateRoutes = require("./routes/Auth/privateRoutes");
+const employeeRoutes = require("./routes/Employe/employes");
+
 
 const app = express();
 
@@ -50,6 +51,7 @@ app.use("/api/poliburbujaprecios", poliburbujapreciosRoutes);
 app.use("/api/eva", evaRoutes);
 
 app.use("/api/employee", employeeRoutes); // Rutas de empleados
+
 
 
 app.use("/api", privateRoutes); // Rutas protegidas

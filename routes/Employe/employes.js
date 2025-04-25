@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const client = require('../db');
+const client = require('../../db');
 
 // Obtener todos los empleados
 router.get("/", async (req, res) => {
@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
 // Crear un nuevo empleado
 router.post("/", async (req, res) => {
   const {
-    photo,
+   
     name,
     last_name_paterno,
     last_name_materno,
@@ -30,9 +30,9 @@ router.post("/", async (req, res) => {
 
   try {
     const result = await client.query(
-      `INSERT INTO employees (photo, name, last_name_paterno, last_name_materno, position, salary, hire_date, phone_number, emergency_contact, nss, status)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
-      [photo, name, last_name_paterno, last_name_materno, position, salary, hire_date, phone_number, emergency_contact, nss, status]
+      `INSERT INTO employees ( name, last_name_paterno, last_name_materno, position, salary, hire_date, phone_number, emergency_contact, nss, status)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
+      [ name, last_name_paterno, last_name_materno, position, salary, hire_date, phone_number, emergency_contact, nss, status]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {

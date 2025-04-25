@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const client = require('../db');
+const client = require('../../../db');
 
 // Obtener todos los precios de Poliburbuja
 router.get("/", async (req, res) => {

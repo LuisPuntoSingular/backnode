@@ -1,24 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const client = require('../db');
+const client = require('../../../db');
 
-// Obtener todos los derivados
+// Obtener todas las entradas de EVA
 router.get("/", async (req, res) => {
   try {
-    const result = await client.query("SELECT * FROM Derivatives");
+    const result = await client.query("SELECT * FROM Eva");
     res.json(result.rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Crear un nuevo derivado
+// Crear una nueva entrada de EVA
 router.post("/", async (req, res) => {
-  const { name, materialid } = req.body;
+  const { medida, precio } = req.body;
   try {
     const result = await client.query(
-      "INSERT INTO Derivatives (name, materialid) VALUES ($1, $2) RETURNING *",
-      [name, materialid]
+      "INSERT INTO Eva (medida, precio) VALUES ($1, $2) RETURNING *",
+      [medida, precio]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -26,17 +26,17 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Actualizar un derivado existente
+// Actualizar una entrada de EVA existente
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, materialid } = req.body;
+  const { medida, precio } = req.body;
   try {
     const result = await client.query(
-      "UPDATE Derivatives SET name = $1, materialid = $2 WHERE derivativeid = $3 RETURNING *",
-      [name, materialid, id]
+      "UPDATE Eva SET medida = $1, precio = $2 WHERE id = $3 RETURNING *",
+      [medida, precio, id]
     );
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Derivative not found" });
+      return res.status(404).json({ error: "EVA entry not found" });
     }
     res.json(result.rows[0]);
   } catch (error) {
@@ -44,18 +44,18 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Eliminar un derivado
+// Eliminar una entrada de EVA
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const result = await client.query(
-      "DELETE FROM Derivatives WHERE derivativeid = $1 RETURNING *",
+      "DELETE FROM Eva WHERE id = $1 RETURNING *",
       [id]
     );
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Derivative not found" });
+      return res.status(404).json({ error: "EVA entry not found" });
     }
-    res.json({ message: "Derivative deleted successfully" });
+    res.json({ message: "EVA entry deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
