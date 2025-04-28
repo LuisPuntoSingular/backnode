@@ -45,4 +45,20 @@ router.put('/:id', async (req, res) => {
     }
 });
 
+
+// GET: Obtener el número de empleados con NSS activado
+router.get('/count/nss', async (req, res) => {
+    try {
+        const result = await pool.query(
+            'SELECT COUNT(*) AS count FROM employee_documents WHERE nss = true'
+        );
+        res.status(200).json({ count: parseInt(result.rows[0].count, 10) });
+    } catch (error) {
+        console.error('Error al obtener el número de empleados con NSS activado:', error);
+        res.status(500).json({ error: 'Error al obtener el número de empleados con NSS activado' });
+    }
+});
+
+
+
 module.exports = router;
