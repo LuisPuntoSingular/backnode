@@ -32,6 +32,8 @@ app.use(express.json());
 
 app.use("/auth", authRoutes); // Rutas de autenticación
 
+app.use("/api/employeeDocuments", employeeDocumentsRoutes);
+
 // Proteger rutas de la API y registrar acciones
 app.use("/api", authenticateToken, historicalActionsMiddleware);
 
@@ -52,7 +54,7 @@ app.use("/api/poliburbujaprecios", poliburbujapreciosRoutes);
 app.use("/api/eva", evaRoutes);
 
 app.use("/api/employee", employeeRoutes); // Rutas de empleados
-app.use("/api/employeeDocuments", employeeDocumentsRoutes); // Rutas de documentos de empleados
+ // Rutas de documentos de empleados
 
 
 

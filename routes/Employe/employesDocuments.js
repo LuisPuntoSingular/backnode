@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const client = require('../../db'); // Asegúrate de tener configurada tu conexión a la base de datos
+const pool = require('../../db'); // Asegúrate de tener configurada tu conexión a la base de datos
 
 // GET: Obtener todos los documentos de empleados
 router.get('/:id', async (req, res) => {
