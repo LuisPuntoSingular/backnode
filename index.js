@@ -22,6 +22,7 @@ const { authenticateToken } = require("./middleware/authMiddleware");
 const authRoutes = require("./routes/Auth/authRoutes");
 const privateRoutes = require("./routes/Auth/privateRoutes");
 const employeeRoutes = require("./routes/Employe/employes");
+const employeeDocumentsRoutes = require("./routes/Employe/employesDocuments");
 
 
 const app = express();
@@ -51,6 +52,7 @@ app.use("/api/poliburbujaprecios", poliburbujapreciosRoutes);
 app.use("/api/eva", evaRoutes);
 
 app.use("/api/employee", employeeRoutes); // Rutas de empleados
+app.use("/api/employeeDocuments", employeeDocumentsRoutes); // Rutas de documentos de empleados
 
 
 
