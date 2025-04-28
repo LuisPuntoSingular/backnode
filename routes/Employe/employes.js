@@ -15,7 +15,6 @@ router.get("/", async (req, res) => {
 // Crear un nuevo empleado
 router.post("/", async (req, res) => {
   const {
-   
     name,
     last_name_paterno,
     last_name_materno,
@@ -24,18 +23,34 @@ router.post("/", async (req, res) => {
     hire_date,
     phone_number,
     emergency_contact,
-    nss,
     status
   } = req.body;
 
   try {
-    const result = await client.query(
-      `INSERT INTO employees ( name, last_name_paterno, last_name_materno, position, salary, hire_date, phone_number, emergency_contact, nss, status)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
-      [ name, last_name_paterno, last_name_materno, position, salary, hire_date, phone_number, emergency_contact, nss, status]
+    // Iniciar transacción
+    await client.query('BEGIN');
+
+    // Insertar el empleado
+    const employeeResult = await client.query(
+      `INSERT INTO employees (name, last_name_paterno, last_name_materno, position, salary, hire_date, phone_number, emergency_contact, status)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
+      [name, last_name_paterno, last_name_materno, position, salary, hire_date, phone_number, emergency_contact, status]
     );
-    res.status(201).json(result.rows[0]);
+
+    const newEmployeeId = employeeResult.rows[0].id;
+
+    // Insertar documentos vacíos para el nuevo empleado
+    await client.query(
+      `INSERT INTO employee_documents (employee_id) VALUES ($1)`,
+      [newEmployeeId]
+    );
+
+    // Confirmar la transacción
+    await client.query('COMMIT');
+
+    res.status(201).json({ message: "Employee and documents created successfully", employeeId: newEmployeeId });
   } catch (error) {
+    await client.query('ROLLBACK');
     res.status(500).json({ error: error.message });
   }
 });
@@ -44,7 +59,6 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const {
-    photo,
     name,
     last_name_paterno,
     last_name_materno,
@@ -53,20 +67,21 @@ router.put("/:id", async (req, res) => {
     hire_date,
     phone_number,
     emergency_contact,
-    nss,
     status
   } = req.body;
 
   try {
     const result = await client.query(
       `UPDATE employees
-       SET photo = $1, name = $2, last_name_paterno = $3, last_name_materno = $4, position = $5, salary = $6, hire_date = $7, phone_number = $8, emergency_contact = $9, nss = $10, status = $11
-       WHERE id = $12 RETURNING *`,
-      [photo, name, last_name_paterno, last_name_materno, position, salary, hire_date, phone_number, emergency_contact, nss, status, id]
+       SET name = $1, last_name_paterno = $2, last_name_materno = $3, position = $4, salary = $5, hire_date = $6, phone_number = $7, emergency_contact = $8, status = $9
+       WHERE id = $10 RETURNING *`,
+      [name, last_name_paterno, last_name_materno, position, salary, hire_date, phone_number, emergency_contact, status, id]
     );
+
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Employee not found" });
     }
+
     res.json(result.rows[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -82,9 +97,11 @@ router.delete("/:id", async (req, res) => {
       "DELETE FROM employees WHERE id = $1 RETURNING *",
       [id]
     );
+
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Employee not found" });
     }
+
     res.json({ message: "Employee deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
