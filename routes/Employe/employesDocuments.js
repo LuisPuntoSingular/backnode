@@ -3,13 +3,17 @@ const router = express.Router();
 const client = require('../../db'); // Asegúrate de tener configurada tu conexión a la base de datos
 
 // GET: Obtener todos los documentos de empleados
-router.get('/', async (req, res) => {
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
     try {
-        const result = await pool.query('SELECT * FROM employee_documents');
-        res.status(200).json(result.rows);
+        const result = await pool.query('SELECT * FROM employee_documents WHERE id = $1', [id]);
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Documento de empleado no encontrado' });
+        }
+        res.status(200).json(result.rows[0]);
     } catch (error) {
-        console.error('Error al obtener los documentos de empleados:', error);
-        res.status(500).json({ error: 'Error al obtener los documentos de empleados' });
+        console.error('Error al obtener los documentos del empleado:', error);
+        res.status(500).json({ error: 'Error al obtener los documentos del empleado' });
     }
 });
 
