@@ -2,30 +2,16 @@ const express = require("express");
 const router = express.Router();
 const pool = require('../../../db'); // Ensure the correct path to your database connection
 
-// GET: Retrieve all employee address and contact information
-router.get("/", async (req, res) => {
-    try {
-        const result = await pool.query(`
-            SELECT eac.*, e.name AS employee_name, e.last_name_paterno AS employee_last_name
-            FROM employee_address_contact eac
-            INNER JOIN employees e ON eac.employee_id = e.id
-        `);
-        res.status(200).json(result.rows);
-    } catch (error) {
-        console.error("Error retrieving address and contact information:", error);
-        res.status(500).json({ error: "Error retrieving address and contact information" });
-    }
-});
+
 
 // GET: Retrieve address and contact information by ID
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
     try {
         const result = await pool.query(`
-            SELECT eac.*, e.name AS employee_name, e.last_name_paterno AS employee_last_name
-            FROM employee_address_contact eac
-            INNER JOIN employees e ON eac.employee_id = e.id
-            WHERE eac.id = $1
+            SELECT * 
+            FROM employee_address_contact
+            WHERE id = $1
         `, [id]);
         if (result.rowCount === 0) {
             return res.status(404).json({ error: "Address and contact information not found" });

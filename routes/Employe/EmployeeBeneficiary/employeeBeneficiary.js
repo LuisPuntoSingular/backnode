@@ -3,12 +3,12 @@ const router = express.Router();
 const pool = require('../../../db'); // Ensure the correct path to your database connection
 
 // GET: Retrieve all employee beneficiaries
+// GET: Retrieve all employee beneficiaries
 router.get("/", async (req, res) => {
     try {
         const result = await pool.query(`
-            SELECT eb.*, e.name AS employee_name, e.last_name_paterno AS employee_last_name
-            FROM employee_beneficiary eb
-            INNER JOIN employees e ON eb.employee_id = e.id
+            SELECT * 
+            FROM employee_beneficiary
         `);
         res.status(200).json(result.rows);
     } catch (error) {

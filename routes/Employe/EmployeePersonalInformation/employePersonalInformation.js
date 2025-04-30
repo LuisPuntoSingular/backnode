@@ -18,14 +18,14 @@ router.get("/", async (req, res) => {
 });
 
 // GET: Retrieve personal information by ID
+// GET: Retrieve personal information by ID
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
     try {
         const result = await pool.query(`
-            SELECT epi.*, e.name, e.last_name_paterno AS last_name_father, e.last_name_materno AS last_name_mother
-            FROM employee_personal_information epi
-            INNER JOIN employees e ON epi.employee_id = e.id
-            WHERE epi.id = $1
+            SELECT * 
+            FROM employee_personal_information
+            WHERE id = $1
         `, [id]);
         if (result.rowCount === 0) {
             return res.status(404).json({ error: "Personal information not found" });
