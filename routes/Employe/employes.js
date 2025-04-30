@@ -6,9 +6,7 @@ const client = require('../../db');
 router.get("/", async (req, res) => {
   try {
     const result = await client.query(`
-      SELECT e.*, w.work_area_name
-      FROM employees e
-      LEFT JOIN work_areas w ON e.work_area_id = w.id
+      SELECT * FROM employees
     `);
     res.json(result.rows);
   } catch (error) {
