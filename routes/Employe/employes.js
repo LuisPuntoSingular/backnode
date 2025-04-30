@@ -44,7 +44,7 @@ router.post("/", async (req, res) => {
 
     await client.query('COMMIT');
 
-    res.status(201).json({ message: "Employee and documents created successfully", employeeId: newEmployeeId });
+    res.status(201).json({ message: "Employee and documents created successfully", id: newEmployeeId });
   } catch (error) {
     await client.query('ROLLBACK');
     res.status(500).json({ error: error.message });
