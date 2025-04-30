@@ -5,7 +5,11 @@ const client = require('../../db');
 // Obtener todos los empleados
 router.get("/", async (req, res) => {
   try {
-    const result = await client.query("SELECT * FROM employees");
+    const result = await client.query(`
+      SELECT e.*, w.work_area_name
+      FROM employees e
+      LEFT JOIN work_areas w ON e.work_area_id = w.id
+    `);
     res.json(result.rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -18,34 +22,28 @@ router.post("/", async (req, res) => {
     name,
     last_name_paterno,
     last_name_materno,
-    position,
+    work_area_id,  // antes era 'position'
     salary,
     hire_date,
-    phone_number,
-    emergency_contact,
     status
   } = req.body;
 
   try {
-    // Iniciar transacción
     await client.query('BEGIN');
 
-    // Insertar el empleado
     const employeeResult = await client.query(
-      `INSERT INTO employees (name, last_name_paterno, last_name_materno, position, salary, hire_date, phone_number, emergency_contact, status)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
-      [name, last_name_paterno, last_name_materno, position, salary, hire_date, phone_number, emergency_contact, status]
+      `INSERT INTO employees (name, last_name_paterno, last_name_materno, work_area_id, salary, hire_date, status)
+       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
+      [name, last_name_paterno, last_name_materno, work_area_id, salary, hire_date, status]
     );
 
     const newEmployeeId = employeeResult.rows[0].id;
 
-    // Insertar documentos vacíos para el nuevo empleado
     await client.query(
       `INSERT INTO employee_documents (employee_id) VALUES ($1)`,
       [newEmployeeId]
     );
 
-    // Confirmar la transacción
     await client.query('COMMIT');
 
     res.status(201).json({ message: "Employee and documents created successfully", employeeId: newEmployeeId });
@@ -62,20 +60,18 @@ router.put("/:id", async (req, res) => {
     name,
     last_name_paterno,
     last_name_materno,
-    position,
+    work_area_id,  // antes era 'position'
     salary,
     hire_date,
-    phone_number,
-    emergency_contact,
     status
   } = req.body;
 
   try {
     const result = await client.query(
       `UPDATE employees
-       SET name = $1, last_name_paterno = $2, last_name_materno = $3, position = $4, salary = $5, hire_date = $6, phone_number = $7, emergency_contact = $8, status = $9
-       WHERE id = $10 RETURNING *`,
-      [name, last_name_paterno, last_name_materno, position, salary, hire_date, phone_number, emergency_contact, status, id]
+       SET name = $1, last_name_paterno = $2, last_name_materno = $3, work_area_id = $4, salary = $5, hire_date = $6, status = $7
+       WHERE id = $8 RETURNING *`,
+      [name, last_name_paterno, last_name_materno, work_area_id, salary, hire_date, status, id]
     );
 
     if (result.rows.length === 0) {

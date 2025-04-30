@@ -23,7 +23,7 @@ const authRoutes = require("./routes/Auth/authRoutes");
 const privateRoutes = require("./routes/Auth/privateRoutes");
 const employeeRoutes = require("./routes/Employe/employes");
 const employeeDocumentsRoutes = require("./routes/Employe/employesDocuments");
-
+const workAreasRoutes = require('./routes/WorkAreas/workAreas.routes');
 
 const app = express();
 
@@ -32,7 +32,7 @@ app.use(express.json());
 
 app.use("/auth", authRoutes); // Rutas de autenticación
 
-app.use("/api/employeeDocuments", employeeDocumentsRoutes);
+
 
 // Proteger rutas de la API y registrar acciones
 app.use("/api", authenticateToken, historicalActionsMiddleware);
@@ -55,7 +55,9 @@ app.use("/api/eva", evaRoutes);
 
 app.use("/api/employee", employeeRoutes); // Rutas de empleados
  // Rutas de documentos de empleados
+ app.use("/api/employeeDocuments", employeeDocumentsRoutes);
 
+ app.use('/api/work-areas', workAreasRoutes);
 
 
 app.use("/api", privateRoutes); // Rutas protegidas
