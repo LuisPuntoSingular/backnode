@@ -15,14 +15,17 @@ router.get("/", async (req, res) => {
 });
 
 // Crear un nuevo empleado
+// Crear un nuevo empleado
 router.post("/", async (req, res) => {
   const {
-    name,
+    first_name,
+    second_name,
     last_name_paterno,
     last_name_materno,
     work_area_id,  // antes era 'position'
     salary,
     hire_date,
+    nss_date,
     status
   } = req.body;
 
@@ -30,9 +33,9 @@ router.post("/", async (req, res) => {
     await client.query('BEGIN');
 
     const employeeResult = await client.query(
-      `INSERT INTO employees (name, last_name_paterno, last_name_materno, work_area_id, salary, hire_date, status)
-       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
-      [name, last_name_paterno, last_name_materno, work_area_id, salary, hire_date, status]
+      `INSERT INTO employees (first_name, second_name, last_name_paterno, last_name_materno, work_area_id, salary, hire_date, nss_date, status)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
+      [first_name, second_name, last_name_paterno, last_name_materno, work_area_id, salary, hire_date, nss_date, status]
     );
 
     const newEmployeeId = employeeResult.rows[0].id;
@@ -55,21 +58,23 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const {
-    name,
+    first_name,
+    second_name,
     last_name_paterno,
     last_name_materno,
     work_area_id,  // antes era 'position'
     salary,
     hire_date,
+    nss_date,
     status
   } = req.body;
 
   try {
     const result = await client.query(
       `UPDATE employees
-       SET name = $1, last_name_paterno = $2, last_name_materno = $3, work_area_id = $4, salary = $5, hire_date = $6, status = $7
-       WHERE id = $8 RETURNING *`,
-      [name, last_name_paterno, last_name_materno, work_area_id, salary, hire_date, status, id]
+       SET first_name = $1, second_name = $2, last_name_paterno = $3, last_name_materno = $4, work_area_id = $5, salary = $6, hire_date = $7, nss_date = $8, status = $9
+       WHERE id = $10 RETURNING *`,
+      [first_name, second_name, last_name_paterno, last_name_materno, work_area_id, salary, hire_date, nss_date, status, id]
     );
 
     if (result.rows.length === 0) {
