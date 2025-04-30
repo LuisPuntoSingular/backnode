@@ -2,22 +2,9 @@ const express = require("express");
 const router = express.Router();
 const pool = require('../../../db'); // Ensure the correct path to your database connection
 
-// GET: Retrieve all employee personal information
-router.get("/", async (req, res) => {
-    try {
-        const result = await pool.query(`
-            SELECT epi.*, e.name, e.last_name_paterno AS last_name_father, e.last_name_materno AS last_name_mother
-            FROM employee_personal_information epi
-            INNER JOIN employees e ON epi.employee_id = e.id
-        `);
-        res.status(200).json(result.rows);
-    } catch (error) {
-        console.error("Error retrieving personal information:", error);
-        res.status(500).json({ error: "Error retrieving personal information" });
-    }
-});
 
-// GET: Retrieve personal information by ID
+
+
 // GET: Retrieve personal information by ID
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
@@ -25,7 +12,7 @@ router.get("/:id", async (req, res) => {
         const result = await pool.query(`
             SELECT * 
             FROM employee_personal_information
-            WHERE id = $1
+            WHERE employee_id = $1
         `, [id]);
         if (result.rowCount === 0) {
             return res.status(404).json({ error: "Personal information not found" });
