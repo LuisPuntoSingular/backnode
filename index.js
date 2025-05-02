@@ -28,17 +28,15 @@ const employeeBeneficiaryRoutes = require("./routes/Employe/EmployeeBeneficiary/
 const employeeAdressContact = require("./routes/Employe/EmployeeAdressContact/employeeAdressContact");
 const workAreasRoutes = require('./routes/WorkAreas/workAreas.routes');
 
+const plantsRoutes = require("./routes/Employe/Plant/plant");
+
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
 app.use("/auth", authRoutes); // Rutas de autenticación
-
-
-
-// Proteger rutas de la API y registrar acciones
-app.use("/api", authenticateToken, historicalActionsMiddleware);
 
 
 app.use("/api/materials", materialsRoutes);
@@ -56,10 +54,18 @@ app.use("/api/poliburbuja", poliburbujaRoutes);
 app.use("/api/poliburbujaprecios", poliburbujapreciosRoutes);
 app.use("/api/eva", evaRoutes);
 
+
+// Proteger rutas de la API y registrar acciones
+app.use("/api", authenticateToken, historicalActionsMiddleware);
+
+
+
+
 app.use("/api/employee", employeeRoutes); // Rutas de empleados
 app.use("/api/employeePersonalInformation", employeePersonalInformationRoutes); // Rutas de información personal de empleados
 app.use("/api/employeeBeneficiary", employeeBeneficiaryRoutes); // Rutas de beneficiarios de empleados
 app.use("/api/employeeAddressContact", employeeAdressContact); // Rutas de dirección y contacto de empleados 
+app.use("/api/plants", plantsRoutes); // Rutas de plantas
 
 // Rutas de documentos de empleados
  app.use("/api/employeeDocuments", employeeDocumentsRoutes);
