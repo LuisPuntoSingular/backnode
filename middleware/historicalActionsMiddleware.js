@@ -2,6 +2,11 @@ const client = require('../db');
 
 const historicalActionsMiddleware = async (req, res, next) => {
   try {
+    // Ignorar los métodos GET
+    if (req.method === 'GET') {
+      return next();
+    }
+
     // Verificar si el usuario está autenticado
     const user = req.user ? req.user.email : 'Unknown User'; // Usar el email del usuario autenticado
     const action = `${req.method} ${req.originalUrl}`;

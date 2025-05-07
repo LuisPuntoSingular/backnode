@@ -39,6 +39,11 @@ app.use(express.json());
 app.use("/auth", authRoutes); // Rutas de autenticación
 
 
+
+// Proteger rutas de la API y registrar acciones
+app.use("/api", authenticateToken, historicalActionsMiddleware);
+
+
 app.use("/api/materials", materialsRoutes);
 app.use("/api/derivatives", derivativesRoutes);
 app.use("/api/resistances", resistancesRoutes);
@@ -53,12 +58,6 @@ app.use("/api/coloresprecio", coloresPrecioRoutes);
 app.use("/api/poliburbuja", poliburbujaRoutes);
 app.use("/api/poliburbujaprecios", poliburbujapreciosRoutes);
 app.use("/api/eva", evaRoutes);
-
-
-// Proteger rutas de la API y registrar acciones
-app.use("/api", authenticateToken, historicalActionsMiddleware);
-
-
 
 
 app.use("/api/employee", employeeRoutes); // Rutas de empleados
@@ -80,4 +79,4 @@ app.use("/api", privateRoutes); // Rutas protegidas
 
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Servidor en el puerto ${PORT}`));
+app.listen(PORT, () => console.log(`http://localhost: ${PORT}`));

@@ -7,7 +7,9 @@ router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const result = await pool.query(
-            'SELECT birth_certificate, curp, proof_of_address, ine, rfc, nss FROM employee_documents WHERE id = $1',
+            `SELECT birth_certificate, curp, proof_of_address, ine, rfc, nss, fonacot, infonavit 
+             FROM employee_documents 
+             WHERE id = $1`,
             [id]
         );
         if (result.rowCount === 0) {
@@ -23,15 +25,23 @@ router.get('/:id', async (req, res) => {
 // PUT: Actualizar un documento de empleado por ID
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
-    const { birth_certificate, curp, proof_of_address, ine, rfc, nss } = req.body;
+    const { birth_certificate, curp, proof_of_address, ine, rfc, nss, fonacot, infonavit } = req.body;
 
     try {
         const result = await pool.query(
             `UPDATE employee_documents
-             SET birth_certificate = $1, curp = $2, proof_of_address = $3, ine = $4, rfc = $5, nss = $6
-             WHERE id = $7
+             SET 
+                birth_certificate = $1, 
+                curp = $2, 
+                proof_of_address = $3, 
+                ine = $4, 
+                rfc = $5, 
+                nss = $6, 
+                fonacot = $7, 
+                infonavit = $8
+             WHERE id = $9
              RETURNING *`,
-            [birth_certificate, curp, proof_of_address, ine, rfc, nss, id]
+            [birth_certificate, curp, proof_of_address, ine, rfc, nss, fonacot, infonavit, id]
         );
 
         if (result.rowCount === 0) {
@@ -44,21 +54,5 @@ router.put('/:id', async (req, res) => {
         res.status(500).json({ error: 'Error al actualizar el documento de empleado' });
     }
 });
-
-
-// GET: Obtener el número de empleados con NSS activado
-router.get('/count/nss', async (req, res) => {
-    try {
-        const result = await pool.query(
-            'SELECT COUNT(*) AS count FROM employee_documents WHERE nss = true'
-        );
-        res.status(200).json({ count: parseInt(result.rows[0].count, 10) });
-    } catch (error) {
-        console.error('Error al obtener el número de empleados con NSS activado:', error);
-        res.status(500).json({ error: 'Error al obtener el número de empleados con NSS activado' });
-    }
-});
-
-
 
 module.exports = router;
