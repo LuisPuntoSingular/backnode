@@ -26,12 +26,12 @@ router.get("/:id", async (req, res) => {
 
 // POST: Create new personal information
 router.post("/", async (req, res) => {
-    const { employee_id, curp, rfc, gender, marital_status, birth_date, nss } = req.body;
+    const { employee_id, curp, rfc, gender, marital_status, birth_date, nss, is_card, cardname } = req.body;
     try {
         const result = await pool.query(
-            `INSERT INTO employee_personal_information (employee_id, curp, rfc, gender, marital_status, birth_date, nss)
-             VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-            [employee_id, curp, rfc, gender, marital_status, birth_date, nss]
+            `INSERT INTO employee_personal_information (employee_id, curp, rfc, gender, marital_status, birth_date, nss, is_card, cardname)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+            [employee_id, curp, rfc, gender, marital_status, birth_date, nss, is_card, cardname]
         );
         res.status(201).json(result.rows[0]);
     } catch (error) {
@@ -43,13 +43,13 @@ router.post("/", async (req, res) => {
 // PUT: Update personal information by ID
 router.put("/:id", async (req, res) => {
     const { id } = req.params;
-    const { employee_id, curp, rfc, gender, marital_status, birth_date, nss } = req.body;
+    const { employee_id, curp, rfc, gender, marital_status, birth_date, nss, is_card, cardname } = req.body;
     try {
         const result = await pool.query(
             `UPDATE employee_personal_information
-             SET employee_id = $1, curp = $2, rfc = $3, gender = $4, marital_status = $5, birth_date = $6, nss = $7
-             WHERE id = $8 RETURNING *`,
-            [employee_id, curp, rfc, gender, marital_status, birth_date, nss, id]
+             SET employee_id = $1, curp = $2, rfc = $3, gender = $4, marital_status = $5, birth_date = $6, nss = $7, is_card = $8, cardname = $9
+             WHERE id = $10 RETURNING *`,
+            [employee_id, curp, rfc, gender, marital_status, birth_date, nss, is_card, cardname, id]
         );
         if (result.rowCount === 0) {
             return res.status(404).json({ error: "Personal information not found" });

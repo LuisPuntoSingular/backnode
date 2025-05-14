@@ -1,6 +1,7 @@
 // index.js
 require("dotenv").config();
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const historicalActionsMiddleware = require('./middleware/historicalActionsMiddleware');
@@ -26,14 +27,28 @@ const employeeDocumentsRoutes = require("./routes/Employe/employesDocuments");
 const employeePersonalInformationRoutes = require("./routes/Employe/EmployeePersonalInformation/employePersonalInformation");
 const employeeBeneficiaryRoutes = require("./routes/Employe/EmployeeBeneficiary/employeeBeneficiary");
 const employeeAdressContact = require("./routes/Employe/EmployeeAdressContact/employeeAdressContact");
+const employeeBoss = require("./routes/Employe/EmployeeBoss/employeeboss");
 const workAreasRoutes = require('./routes/WorkAreas/workAreas.routes');
 
 const plantsRoutes = require("./routes/Employe/Plant/plant");
+const attendanceRoutes = require('./routes/HumanResources/attendanceRoutes');
+const workWeeksRoutes = require('./routes/HumanResources/workWeeksRoutes');
+const holidaysRoutes = require('./routes/HumanResources/holidaysRoutes');
+const codesRoutes = require('./routes/HumanResources/attendanceCodeRoutes');
+
+ 
+
+
 
 
 const app = express();
-
-app.use(cors());
+// Usa cookie-parser
+app.use(cookieParser());
+// Configurar CORS
+app.use(cors({
+    origin: "http://localhost:3000", // Dominio permitido (tu frontend)
+    credentials: true, // Permitir el envío de cookies y encabezados de autenticación
+  }));
 app.use(express.json());
 
 app.use("/auth", authRoutes); // Rutas de autenticación
@@ -65,12 +80,23 @@ app.use("/api/employeePersonalInformation", employeePersonalInformationRoutes); 
 app.use("/api/employeeBeneficiary", employeeBeneficiaryRoutes); // Rutas de beneficiarios de empleados
 app.use("/api/employeeAddressContact", employeeAdressContact); // Rutas de dirección y contacto de empleados 
 app.use("/api/plants", plantsRoutes); // Rutas de plantas
+app.use("/api/employeeBoss", employeeBoss); // Rutas de jefes de empleados
 
 // Rutas de documentos de empleados
  app.use("/api/employeeDocuments", employeeDocumentsRoutes);
 
-
+// Rutas de Areas de trabajo
  app.use('/api/work-areas', workAreasRoutes);
+
+// Rutas de asistencia
+app.use('/api/attendance', attendanceRoutes);
+// Rutas de semanas laborales
+app.use('/api/work-weeks', workWeeksRoutes);
+// Rutas de días festivos
+app.use('/api/holidays', holidaysRoutes);
+// Rutas de códigos de asistencia
+app.use('/api/attendance-codes', codesRoutes);
+
 
 
 app.use("/api", privateRoutes); // Rutas protegidas

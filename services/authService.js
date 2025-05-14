@@ -1,10 +1,10 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const client = require("../db"); // Asegúrate de que la ruta sea correcta
+const client = require("../db");
 
 // Registrar un nuevo usuario
 const registerUser = async (email, password, role = 'user') => {
-  const hashedPassword = await bcrypt.hash(password, 10); // Encripta la contraseña
+  const hashedPassword = await bcrypt.hash(password, 10);
   const query = `
     INSERT INTO users (email, password_hash, role)
     VALUES ($1, $2, $3)
@@ -14,7 +14,7 @@ const registerUser = async (email, password, role = 'user') => {
 
   try {
     const result = await client.query(query, values);
-    return result.rows[0]; // Devuelve el usuario registrado
+    return result.rows[0];
   } catch (err) {
     throw new Error("Error al registrar el usuario: " + err.message);
   }
@@ -22,7 +22,7 @@ const registerUser = async (email, password, role = 'user') => {
 
 // Autenticar un usuario existente
 const authenticateUser = async (email, password) => {
-  const query = `SELECT id, email, password_hash, role FROM users WHERE email = $1`; // Incluye el campo 'role'
+  const query = `SELECT id, email, password_hash, role , employee_id  FROM users WHERE email = $1`;
   try {
     const result = await client.query(query, [email]);
 
@@ -31,6 +31,7 @@ const authenticateUser = async (email, password) => {
     }
 
     const user = result.rows[0];
+    
     const isPasswordValid = await bcrypt.compare(password, user.password_hash);
 
     if (!isPasswordValid) {
@@ -39,21 +40,13 @@ const authenticateUser = async (email, password) => {
 
     // Generar un token JWT
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role }, // Incluye 'role' en el payload del token
+      { id: user.id, email: user.email
+       },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "20m", // Expira en 20 minutos
-      }
+      { expiresIn: "20m" }
     );
 
-    return { 
-      token, 
-      user: { 
-        id: user.id, 
-        email: user.email, 
-        role: user.role // Incluye 'role' en la respuesta
-      } 
-    };
+    return { token, user };
   } catch (err) {
     throw new Error("Error al autenticar el usuario: " + err.message);
   }
