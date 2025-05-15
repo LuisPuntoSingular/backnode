@@ -20,11 +20,14 @@ router.get("/", async (req, res) => {
 
 router.get("/by-work-area-and-plant", getEmployeesByWorkAreaAndPlant);
 
-// Obtener todos los empleados que son jefes (is_boss = true)
+// Obtener el id y nombre completo de todos los empleados que son jefes (is_boss = true)
 router.get("/bosses", async (req, res) => {
   try {
     const result = await client.query(`
-      SELECT * FROM employees WHERE is_boss = true
+      SELECT id, 
+             CONCAT(first_name, ' ', COALESCE(second_name, ''), ' ', last_name_paterno, ' ', last_name_materno) AS full_name
+      FROM employees 
+      WHERE is_boss = true
     `);
     res.status(200).json(result.rows);
   } catch (error) {
@@ -54,20 +57,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Obtener el id y nombre completo de todos los empleados que son jefes (is_boss = true)
-router.get("/bosses", async (req, res) => {
-  try {
-    const result = await client.query(`
-      SELECT id, 
-             CONCAT(first_name, ' ', COALESCE(second_name, ''), ' ', last_name_paterno, ' ', last_name_materno) AS full_name
-      FROM employees 
-      WHERE is_boss = true
-    `);
-    res.status(200).json(result.rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+
 
 
 
