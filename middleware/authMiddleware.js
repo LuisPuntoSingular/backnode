@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const authenticateToken = (req, res, next) => {
   const token = req.cookies.token; // Obtener el token de las cookies
-  console.log("Token:", token); // Imprimir el token en la consola para depuración
+
 
   if (!token) {
     return res.status(401).json({ message: "Acceso no autorizado" });

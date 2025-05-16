@@ -25,13 +25,13 @@ router.post("/login", async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Solo en HTTPS en producción
+      secure: process.env.NODE_ENV === "development", // Solo en HTTPS en producción
       sameSite: "None", // Permite el envío entre dominios
     });
 
     res.status(200).json({ message: "Inicio de sesión exitoso", user });
   } catch (err) {
-    res.status(401).json({ message: err.message });
+    res.status(401).json({ message: "Usuario o Contraseña Invalidos" });
   }
 });
 
