@@ -35,6 +35,7 @@ const attendanceRoutes = require('./routes/HumanResources/attendanceRoutes');
 const workWeeksRoutes = require('./routes/HumanResources/workWeeksRoutes');
 const holidaysRoutes = require('./routes/HumanResources/holidaysRoutes');
 const codesRoutes = require('./routes/HumanResources/attendanceCodeRoutes');
+const allowedOrigins = ["http://localhost:3000", "https://www.autopackerp.com"]; // Lista de dominios permitidos
 
  
 
@@ -46,9 +47,15 @@ const app = express();
 app.use(cookieParser());
 // Configurar CORS
 app.use(cors({
-    origin: "http://localhost:3000", // Dominio permitido (tu frontend)
-    credentials: true, // Permitir el envío de cookies y encabezados de autenticación
-  }));
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Permitir el origen
+    } else {
+      callback(new Error("No permitido por CORS")); // Bloquear el origen
+    }
+  },
+  credentials: true, // Permitir el envío de cookies y encabezados de autenticación
+}));
 app.use(express.json());
 
 app.use("/auth", authRoutes); // Rutas de autenticación
