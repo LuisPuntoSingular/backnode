@@ -46,7 +46,16 @@ const app = express();
 // Usa cookie-parser
 app.use(cookieParser());
 // Configurar CORS
-
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Permitir el origen
+    } else {
+      callback(new Error("No permitido por CORS")); // Bloquear el origen
+    }
+  },
+  credentials: true, // Permitir el envío de cookies y encabezados de autenticación
+}));
 app.use(express.json());
 
 app.use("/auth", authRoutes); // Rutas de autenticación
@@ -55,14 +64,6 @@ app.use((req, res, next) => {
   console.log("Origin:", req.headers.origin);
   next();
 });
-
-app.use((req, res, next) => {
-  console.log("Origin:", req.headers.origin);
-  console.log("Path:", req.path);
-  next();
-});
-
-
 
 // Proteger rutas de la API y registrar acciones
 app.use("/api", authenticateToken, historicalActionsMiddleware);
