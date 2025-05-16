@@ -36,6 +36,7 @@ const workWeeksRoutes = require('./routes/HumanResources/workWeeksRoutes');
 const holidaysRoutes = require('./routes/HumanResources/holidaysRoutes');
 const codesRoutes = require('./routes/HumanResources/attendanceCodeRoutes');
 
+ 
 
 
 
@@ -44,13 +45,11 @@ const app = express();
 // Usa cookie-parser
 app.use(cookieParser());
 // Configurar CORS
-
-app.use(express.json());
-
 app.use(cors({
-  origin: "*", // Permitir todos los orígenes
-  credentials: true, // No se necesitan credenciales si se permite "*"
-}));
+    origin: ["http://localhost:3000", "https://www.autopackerp.com/"], // Dominio permitido (tu frontend)
+    credentials: true, // Permitir el envío de cookies y encabezados de autenticación
+  }));
+app.use(express.json());
 
 app.use("/auth", authRoutes); // Rutas de autenticación
 
@@ -76,15 +75,12 @@ app.use("/api/poliburbujaprecios", poliburbujapreciosRoutes);
 app.use("/api/eva", evaRoutes);
 
 
-
+app.use("/api/employee", employeeRoutes); // Rutas de empleados
 app.use("/api/employeePersonalInformation", employeePersonalInformationRoutes); // Rutas de información personal de empleados
 app.use("/api/employeeBeneficiary", employeeBeneficiaryRoutes); // Rutas de beneficiarios de empleados
 app.use("/api/employeeAddressContact", employeeAdressContact); // Rutas de dirección y contacto de empleados 
 app.use("/api/plants", plantsRoutes); // Rutas de plantas
 app.use("/api/employeeBoss", employeeBoss); // Rutas de jefes de empleados
-app.use('/api/attendance', attendanceRoutes);
-app.use("/api/employee", employeeRoutes); // Rutas de empleados
-
 
 // Rutas de documentos de empleados
  app.use("/api/employeeDocuments", employeeDocumentsRoutes);
@@ -93,7 +89,7 @@ app.use("/api/employee", employeeRoutes); // Rutas de empleados
  app.use('/api/work-areas', workAreasRoutes);
 
 // Rutas de asistencia
-
+app.use('/api/attendance', attendanceRoutes);
 // Rutas de semanas laborales
 app.use('/api/work-weeks', workWeeksRoutes);
 // Rutas de días festivos
