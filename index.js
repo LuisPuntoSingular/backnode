@@ -35,7 +35,7 @@ const attendanceRoutes = require('./routes/HumanResources/attendanceRoutes');
 const workWeeksRoutes = require('./routes/HumanResources/workWeeksRoutes');
 const holidaysRoutes = require('./routes/HumanResources/holidaysRoutes');
 const codesRoutes = require('./routes/HumanResources/attendanceCodeRoutes');
-const allowedOrigins = ["http://localhost:3000", "https://www.autopackerp.com/"]; // Lista de dominios permitidos
+const allowedOrigins = ["http://localhost:3000", "https://www.autopackerp.com"]; // Lista de dominios permitidos
 
  
 
