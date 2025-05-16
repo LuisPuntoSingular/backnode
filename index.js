@@ -35,7 +35,7 @@ const attendanceRoutes = require('./routes/HumanResources/attendanceRoutes');
 const workWeeksRoutes = require('./routes/HumanResources/workWeeksRoutes');
 const holidaysRoutes = require('./routes/HumanResources/holidaysRoutes');
 const codesRoutes = require('./routes/HumanResources/attendanceCodeRoutes');
-const allowedOrigins = ["http://localhost:3000", "www.autopackerp.com"]; // Lista de dominios permitidos
+const allowedOrigins = ["http://localhost:3000", "https://www.autopackerp.com/"]; // Lista de dominios permitidos
 
  
 
@@ -60,6 +60,10 @@ app.use(express.json());
 
 app.use("/auth", authRoutes); // Rutas de autenticación
 
+app.use((req, res, next) => {
+  console.log("Origin:", req.headers.origin);
+  next();
+});
 
 // Proteger rutas de la API y registrar acciones
 app.use("/api", authenticateToken, historicalActionsMiddleware);
