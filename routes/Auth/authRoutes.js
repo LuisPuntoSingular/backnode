@@ -27,6 +27,7 @@ router.post("/login", async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true, // Asegura que la cookie no sea accesible desde JavaScript del cliente
       secure: process.env.NODE_ENV === "developmet" | "production", // Solo enviar en HTTPS en producción
+      sameSite: "None", // Necesario para solicitudes cross-origin
       maxAge: 20 * 60 * 1000, // 20 minutos
     });
 
