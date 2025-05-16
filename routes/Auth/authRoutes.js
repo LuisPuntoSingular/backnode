@@ -23,12 +23,10 @@ router.post("/login", async (req, res) => {
   try {
     const { token, user } = await authenticateUser(email, password);
 
-    // Almacenar el token en una cookie
     res.cookie("token", token, {
-      httpOnly: true, // Asegura que la cookie no sea accesible desde JavaScript del cliente
-      secure: process.env.NODE_ENV === "developmet" | "production", // Solo enviar en HTTPS en producción
-      sameSite: "None", // Necesario para solicitudes cross-origin
-      maxAge: 20 * 60 * 1000, // 20 minutos
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Solo en HTTPS en producción
+      sameSite: "None", // Permite el envío entre dominios
     });
 
     res.status(200).json({ message: "Inicio de sesión exitoso", user });
