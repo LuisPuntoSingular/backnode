@@ -46,7 +46,7 @@ const app = express();
 app.use(cookieParser());
 // Configurar CORS
 app.use(cors({
-    origin: ["http://localhost:3000", "https://www.autopackerp.com","https://backnode-production.up.railway.app"], // Dominio permitido (tu frontend)
+    origin: ["http://localhost:3000", "https://www.autopackerp.com","https://backnode-production.up.railway.app","https://backnode-production.up.railway.app/api"], // Dominio permitido (tu frontend)
     credentials: true, // Permitir el envío de cookies y encabezados de autenticación
   }));
 app.use(express.json());
