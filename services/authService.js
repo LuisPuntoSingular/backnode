@@ -43,7 +43,7 @@ const authenticateUser = async (email, password) => {
       { id: user.id, email: user.email
        },
       process.env.JWT_SECRET,
-      { expiresIn: "20m" }
+      { expiresIn: "1h" }
     );
 
     return { token, user };
