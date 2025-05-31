@@ -28,6 +28,9 @@ const employeePersonalInformationRoutes = require("./routes/Employe/EmployeePers
 const employeeBeneficiaryRoutes = require("./routes/Employe/EmployeeBeneficiary/employeeBeneficiary");
 const employeeAdressContact = require("./routes/Employe/EmployeeAdressContact/employeeAdressContact");
 const employeeBoss = require("./routes/Employe/EmployeeBoss/employeeboss");
+const employeePayRoll = require("./routes/Employe/EmployeePayroll/employePayRoll");
+const employeePaYRollStatus = require("./routes/Employe/EmployeePayrollStatus/employePayRollStatus");
+
 const workAreasRoutes = require('./routes/WorkAreas/workAreas.routes');
 
 const plantsRoutes = require("./routes/Employe/Plant/plant");
@@ -81,9 +84,11 @@ app.use("/api/employeeBeneficiary", employeeBeneficiaryRoutes); // Rutas de bene
 app.use("/api/employeeAddressContact", employeeAdressContact); // Rutas de dirección y contacto de empleados 
 app.use("/api/plants", plantsRoutes); // Rutas de plantas
 app.use("/api/employeeBoss", employeeBoss); // Rutas de jefes de empleados
+app.use("/api/employeePayRoll", employeePayRoll); // Rutas de nómina de empleados
+app.use("/api/employeePayRollStatus", employeePaYRollStatus); // Rutas de estado de nómina de 
 
 // Rutas de documentos de empleados
- app.use("/api/employeeDocuments", employeeDocumentsRoutes);
+app.use("/api/employeeDocuments", employeeDocumentsRoutes);
 
 // Rutas de Areas de trabajo
  app.use('/api/work-areas', workAreasRoutes);

@@ -26,7 +26,7 @@ router.post("/login", async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", //****cuidado esto solo cambialo a development cuando estes en desarrollo */
+      secure: process.env.NODE_ENV === "development", //****cuidado esto solo cambialo a development cuando estes en desarrollo */
       sameSite: "None", // Permite el envío entre dominios
     });
 

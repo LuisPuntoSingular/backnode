@@ -22,7 +22,7 @@ const registerUser = async (email, password, role = 'user') => {
 
 // Autenticar un usuario existente
 const authenticateUser = async (email, password) => {
-  const query = `SELECT id, email, password_hash, role , employee_id  FROM users WHERE email = $1`;
+  const query = `SELECT id, email, password_hash, role   FROM users WHERE email = $1`;
   try {
     const result = await client.query(query, [email]);
 
@@ -33,6 +33,7 @@ const authenticateUser = async (email, password) => {
     const user = result.rows[0];
     
     const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+   
 
     if (!isPasswordValid) {
       throw new Error("Contraseña incorrecta");
