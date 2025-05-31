@@ -29,8 +29,9 @@ const employeeBeneficiaryRoutes = require("./routes/Employe/EmployeeBeneficiary/
 const employeeAdressContact = require("./routes/Employe/EmployeeAdressContact/employeeAdressContact");
 const employeeBoss = require("./routes/Employe/EmployeeBoss/employeeboss");
 
-const employeePaYRollStatus = require("./routes/Employe/EmployeePayrollStatus/employePayRollStatus");
-const employeePayRoll = require("./routes/Employe/EmployeePayroll/employePayRoll"); 
+
+const employeePayRoll = require("./routes/Employe/EmployeePayroll/employePayRoll");
+const employeePaYRollStatus = require("./routes/Employe/EmployeePayrollStatus/employePayRollStatus"); 
 
 const workAreasRoutes = require('./routes/WorkAreas/workAreas.routes');
 
