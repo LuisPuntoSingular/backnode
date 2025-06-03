@@ -22,6 +22,9 @@ const evaRoutes = require("./routes/Materials/Eva/Eva");
 const { authenticateToken } = require("./middleware/authMiddleware");
 const authRoutes = require("./routes/Auth/authRoutes");
 const privateRoutes = require("./routes/Auth/privateRoutes");
+
+const employeePayRoll = require("./routes/Employe/EmployeePayRoll/employePayRoll");
+const employeePaYRollStatus = require("./routes/Employe/EmployeePayrollStatus/employePayRollStatus"); 
 const employeeRoutes = require("./routes/Employe/employes");
 const employeeDocumentsRoutes = require("./routes/Employe/employesDocuments");
 const employeePersonalInformationRoutes = require("./routes/Employe/EmployeePersonalInformation/employePersonalInformation");
@@ -30,8 +33,7 @@ const employeeAdressContact = require("./routes/Employe/EmployeeAdressContact/em
 const employeeBoss = require("./routes/Employe/EmployeeBoss/employeeboss");
 
 
-const employeePayRoll = require("./routes/Employe/EmployeePayroll/employePayRoll");
-const employeePaYRollStatus = require("./routes/Employe/EmployeePayrollStatus/employePayRollStatus"); 
+
 
 const workAreasRoutes = require('./routes/WorkAreas/workAreas.routes');
 
@@ -79,15 +81,15 @@ app.use("/api/poliburbuja", poliburbujaRoutes);
 app.use("/api/poliburbujaprecios", poliburbujapreciosRoutes);
 app.use("/api/eva", evaRoutes);
 
-
+app.use("/api/employeePayRoll", employeePayRoll); // Rutas de nómina de empleados
+app.use("/api/employeePayRollStatus", employeePaYRollStatus); // Rutas de estado de nómina de 
 app.use("/api/employee", employeeRoutes); // Rutas de empleados
 app.use("/api/employeePersonalInformation", employeePersonalInformationRoutes); // Rutas de información personal de empleados
 app.use("/api/employeeBeneficiary", employeeBeneficiaryRoutes); // Rutas de beneficiarios de empleados
 app.use("/api/employeeAddressContact", employeeAdressContact); // Rutas de dirección y contacto de empleados 
 app.use("/api/plants", plantsRoutes); // Rutas de plantas
 app.use("/api/employeeBoss", employeeBoss); // Rutas de jefes de empleados
-app.use("/api/employeePayRoll", employeePayRoll); // Rutas de nómina de empleados
-app.use("/api/employeePayRollStatus", employeePaYRollStatus); // Rutas de estado de nómina de 
+
 
 // Rutas de documentos de empleados
 app.use("/api/employeeDocuments", employeeDocumentsRoutes);
