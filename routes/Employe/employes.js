@@ -159,4 +159,39 @@ router.put("/:id", async (req, res) => {
 
 
 
+
+// Actualizar parcialmente un empleado existente
+router.patch("/:id", async (req, res) => {
+  const { id } = req.params;
+  const fields = Object.keys(req.body); // Obtener los campos enviados en el cuerpo de la solicitud
+  const values = Object.values(req.body); // Obtener los valores correspondientes
+
+  if (fields.length === 0) {
+    return res.status(400).json({ error: "No se enviaron campos para actualizar" });
+  }
+
+  // Construir la cláusula SET dinámicamente
+  const setClause = fields.map((field, index) => `${field} = $${index + 1}`).join(", ");
+
+  try {
+    const result = await client.query(
+      `UPDATE employees
+       SET ${setClause}
+       WHERE id = $${fields.length + 1} RETURNING *`,
+      [...values, id] // Agregar el ID al final de los valores
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error("Error en PATCH /:id:", error.message, error.stack);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
 module.exports = router;
