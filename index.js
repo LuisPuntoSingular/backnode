@@ -82,7 +82,7 @@ app.use("/api/poliburbujaprecios", poliburbujapreciosRoutes);
 app.use("/api/eva", evaRoutes);
 
 app.use("/api/employeePayRoll", employeeNomina); // Rutas de nómina de empleados
-app.use("/api/employeePayRollStatus", employeePaYRollStatus); // Rutas de estado de nómina de 
+
 app.use("/api/employee", employeeRoutes); // Rutas de empleados
 app.use("/api/employeePersonalInformation", employeePersonalInformationRoutes); // Rutas de información personal de empleados
 app.use("/api/employeeBeneficiary", employeeBeneficiaryRoutes); // Rutas de beneficiarios de empleados
