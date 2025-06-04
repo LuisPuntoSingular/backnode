@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const client = require("../../../db");
+const client = require("../../../../db");
 
 // GET: Obtener campos específicos por employee_id, week_number y year
 router.get("/by-employee-week-year", async (req, res) => {

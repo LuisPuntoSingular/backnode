@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const client = require("../../../db");
+const client = require("../../../../db");
 
 
 router.get('/payroll/lock', async (req, res) => {

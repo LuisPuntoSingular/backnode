@@ -23,8 +23,8 @@ const { authenticateToken } = require("./middleware/authMiddleware");
 const authRoutes = require("./routes/Auth/authRoutes");
 const privateRoutes = require("./routes/Auth/privateRoutes");
 
-const employeeNomina = require("./routes/Employe/EmployeePayRoll/employePayRoll"); // Rutas de nómina de empleados
-const employeeNominaStatus = require("./routes/Employe/EmployeePayrollStatus/employePayRollStatus"); 
+const employeeNomina = require("./routes/Employe/PayRoll/EmployeePayRoll/employePayRoll"); // Rutas de nómina de empleados
+const employeeNominaStatus = require("./routes/Employe/PayRoll/EmployeePayRollStatus/employePayRollStatus"); 
 const employeeRoutes = require("./routes/Employe/employes");
 const employeeDocumentsRoutes = require("./routes/Employe/employesDocuments");
 const employeePersonalInformationRoutes = require("./routes/Employe/EmployeePersonalInformation/employePersonalInformation");
