@@ -23,7 +23,7 @@ const { authenticateToken } = require("./middleware/authMiddleware");
 const authRoutes = require("./routes/Auth/authRoutes");
 const privateRoutes = require("./routes/Auth/privateRoutes");
 
-const employeePayRoll = require("./routes/Employe/EmployeePayRoll/employePayRoll");
+const employeeNomina = require("./routes/Employe/EmployeePayRoll/employePayRoll"); // Rutas de nómina de empleados
 const employeePaYRollStatus = require("./routes/Employe/EmployeePayrollStatus/employePayRollStatus"); 
 const employeeRoutes = require("./routes/Employe/employes");
 const employeeDocumentsRoutes = require("./routes/Employe/employesDocuments");
@@ -81,7 +81,7 @@ app.use("/api/poliburbuja", poliburbujaRoutes);
 app.use("/api/poliburbujaprecios", poliburbujapreciosRoutes);
 app.use("/api/eva", evaRoutes);
 
-app.use("/api/employeePayRoll", employeePayRoll); // Rutas de nómina de empleados
+app.use("/api/employeePayRoll", employeeNomina); // Rutas de nómina de empleados
 app.use("/api/employeePayRollStatus", employeePaYRollStatus); // Rutas de estado de nómina de 
 app.use("/api/employee", employeeRoutes); // Rutas de empleados
 app.use("/api/employeePersonalInformation", employeePersonalInformationRoutes); // Rutas de información personal de empleados
