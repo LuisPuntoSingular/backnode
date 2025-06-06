@@ -92,6 +92,22 @@ router.delete('/:id', async (req, res) => {
   res.status(204).send();
 });
 
+// Get employee a cross relation with attendance
+
+router.get("/getEmployeesAssist", async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT id, plant_id, first_name, second_name, last_name_paterno, last_name_materno, status
+      FROM employees
+    `);
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
 
 
 
