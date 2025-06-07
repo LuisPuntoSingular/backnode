@@ -7,7 +7,7 @@ router.get("/by-employee-week-year", async (req, res) => {
   const { employee_id, week_number, year } = req.query;
   try {
     const result = await client.query(
-      `SELECT infonavit, fonacot, debt, payment, remaining, others, 
+      `SELECT infonavit, fonacot,total_perceptions, debt, payment, remaining, others, 
               normal_bonus, monthly_bonus, card_payment, cash_payment, total_payment
        FROM employee_payroll 
        WHERE employee_id = $1 AND week_number = $2 AND year = $3`,
