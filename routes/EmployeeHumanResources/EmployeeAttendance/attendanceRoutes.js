@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../../db');
+const db = require('../../../db');
+
+
+
+
 
 // GET por semana y año
 router.get('/by-week', async (req, res) => {
@@ -16,13 +20,13 @@ router.get('/by-week', async (req, res) => {
   res.json(result.rows);
 });
 
-// GET todo
+// GET all attendance records
 router.get('/', async (req, res) => {
   const result = await db.query('SELECT * FROM attendance');
   res.json(result.rows);
 });
 
-// POST nuevo registro
+// POST new attendance record and check for duplicates
 router.post('/', async (req, res) => {
   const { employee_id, date, code, week_id, overtime_hours, is_sunday, is_holiday, remarks } = req.body;
 
@@ -52,9 +56,9 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PUT actualizar por employee_id y date
+// PUT update attendance record by employee_id and date
 router.put('/', async (req, res) => {
-  const { employee_id, date, code, overtime_hours, remarks } = req.body;
+  const { employee_id, date, code, week_id, overtime_hours, is_sunday, is_holiday, remarks } = req.body;
 
   try {
     // Verificar si existe un registro con la combinación de employee_id y date
@@ -70,10 +74,10 @@ router.put('/', async (req, res) => {
     // Actualizar el registro
     const result = await db.query(
       `UPDATE attendance
-       SET code = $1, overtime_hours = $2, remarks = $3
-       WHERE employee_id = $4 AND date = $5
+       SET code = $1, week_id = $2, overtime_hours = $3, is_sunday = $4, is_holiday = $5, remarks = $6
+       WHERE employee_id = $7 AND date = $8
        RETURNING *`,
-      [code, overtime_hours, remarks, employee_id, date]
+      [code, week_id, overtime_hours, is_sunday, is_holiday, remarks, employee_id, date]
     );
 
     res.status(200).json(result.rows[0]);
@@ -82,7 +86,6 @@ router.put('/', async (req, res) => {
     res.status(500).json({ message: 'Error al actualizar el registro de asistencia.' });
   }
 });
-
 
 
 // DELETE
@@ -107,7 +110,31 @@ router.get("/getEmployeesAssist", async (req, res) => {
 });
 
 
+// GET: Obtener registros de asistencia por empleado, rango de fechas y week_id
+router.get('/by-employee-and-date-range', async (req, res) => {
+  const { employee_id, start_date, end_date, week_id } = req.query;
 
+  if (!employee_id || !start_date || !end_date || !week_id) {
+    return res.status(400).json({ message: 'Faltan parámetros requeridos.' });
+  }
+
+  try {
+    const result = await db.query(
+      `SELECT id, employee_id, date, code, week_id, overtime_hours
+       FROM attendance
+       WHERE employee_id = $1
+         AND date BETWEEN $2 AND $3
+         AND week_id = $4
+       ORDER BY date ASC`,
+      [employee_id, start_date, end_date, week_id]
+    );
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error al obtener registros de asistencia:', error);
+    res.status(500).json({ message: 'Error al obtener registros de asistencia.' });
+  }
+});
 
 
 

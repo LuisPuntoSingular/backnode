@@ -3,8 +3,10 @@ require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-
 const historicalActionsMiddleware = require('./middleware/historicalActionsMiddleware');
+const cron = require('node-cron');
+const { refreshEmployeeVacationBalance } = require('./routes/Employe/EmployeeVacations/EmployeeVacationsBalance/Services/employeeVacationsService'); // Importa la función para actualizar el balance de vacaciones
+
 
 
 const materialsRoutes = require("./routes/Materials/materials");
@@ -31,17 +33,21 @@ const employeePersonalInformationRoutes = require("./routes/Employe/EmployeePers
 const employeeBeneficiaryRoutes = require("./routes/Employe/EmployeeBeneficiary/employeeBeneficiary");
 const employeeAdressContact = require("./routes/Employe/EmployeeAdressContact/employeeAdressContact");
 const employeeBoss = require("./routes/Employe/EmployeeBoss/employeeboss");
-
+const employeevacationRoutes = require('./routes/Employe/EmployeeVacations/EmployeeVacationsBalance/employeeVacationsBalanceRoute'); // Rutas de vacaciones de empleados
+const employeeVacationRequestRoutes = require('./routes/Employe/EmployeeVacations/EmployeeVacationsRequest/employeeVacationsRequestRoute'); // Rutas de solicitudes de vacaciones de empleados
+const employeeVacationsRequestDaysRoutes = require('./routes/Employe/EmployeeVacations/EmployeeVacationsRequestDays/employeeVacationsRequestDaysRoute'); // Rutas de días solicitados de vacaciones de empleados
 
 
 
 const workAreasRoutes = require('./routes/WorkAreas/workAreas.routes');
 
 const plantsRoutes = require("./routes/Employe/Plant/plant");
-const attendanceRoutes = require('./routes/HumanResources/attendanceRoutes');
-const workWeeksRoutes = require('./routes/HumanResources/workWeeksRoutes');
-const holidaysRoutes = require('./routes/HumanResources/holidaysRoutes');
-const codesRoutes = require('./routes/HumanResources/attendanceCodeRoutes');
+const attendanceRoutes = require('./routes/EmployeeHumanResources/EmployeeAttendance/attendanceRoutes');
+const workWeeksRoutes = require('./routes/EmployeeHumanResources/workWeeksRoutes');
+const holidaysRoutes = require('./routes/EmployeeHumanResources/holidaysRoutes');
+const codesRoutes = require('./routes/EmployeeHumanResources/EmployeeAttendanceCodes/attendanceCodeRoutes');
+
+//cron 
 
  
 
@@ -61,7 +67,21 @@ app.use(express.json());
 app.use("/auth", authRoutes); // Rutas de autenticación
 
 
+// Ejecutar cada 1ro de mes a las 5 AM hora de Aguascalientes
+cron.schedule('0 5 1 * *', async () => {
+  console.log(`[${new Date().toISOString()}] Ejecutando balance de vacaciones...`);
+  try {
+    await refreshEmployeeVacationBalance();
+    console.log(`[${new Date().toISOString()}] ✅ Balance ejecutado con éxito`);
+  } catch (err) {
+    console.error(`[${new Date().toISOString()}] ❌ Error al ejecutar balance`, err);
+  }
+}, {
+  timezone: 'America/Mexico_City'
+});
 
+
+app.use("/api/employeeVacations", employeevacationRoutes);
 // Proteger rutas de la API y registrar acciones
 app.use("/api", authenticateToken, historicalActionsMiddleware);
 
@@ -91,6 +111,10 @@ app.use("/api/plants", plantsRoutes); // Rutas de plantas
 app.use("/api/employeeBoss", employeeBoss); // Rutas de jefes de empleados
 
 
+app.use("/api/employeeVacationRequest", employeeVacationRequestRoutes); // Rutas de solicitudes de vacaciones de empleados
+app.use("/api/employeeVacationsRequestDays", employeeVacationsRequestDaysRoutes); // Rutas de días solicitados de vacaciones de empleados
+
+
 // Rutas de documentos de empleados
 app.use("/api/employeeDocuments", employeeDocumentsRoutes);
 
@@ -105,7 +129,6 @@ app.use('/api/work-weeks', workWeeksRoutes);
 app.use('/api/holidays', holidaysRoutes);
 // Rutas de códigos de asistencia
 app.use('/api/attendance-codes', codesRoutes);
-
 
 
 app.use("/api", privateRoutes); // Rutas protegidas
